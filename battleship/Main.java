@@ -15,10 +15,12 @@ public class Main {
         System.out.println(board);
         System.out.println("Welcome to Battleship!\n");
 
-        String instructions = "When prompted enter your coordinates in the following format: A1 A5\n" +
-                "The first coordinate is the head of your ship, the second the tail.\n" +
-                "Your tail must be exactly the length of your ship away from the head.\n" +
-                "Your ships must be placed on the horizontal or the vertical - no diagonals.\n";
+        String instructions = """
+                When prompted enter your coordinates in the following format: A1 A5
+                The first coordinate is the head of your ship, the second the tail.
+                Your tail must be exactly the length of your ship away from the head.
+                Your ships must be placed on the horizontal or the vertical - no diagonals.
+                """;
         System.out.println(instructions);
 
         System.out.printf(
