@@ -8,30 +8,63 @@ public class Main {
     public static void main(String[] args) {
 
         char[][] gameGrid = newGameGrid(GRID_SIZE);
-        StringBuilder board = drawBoard(GRID_SIZE, gameGrid);
         Ship[] ships = createShips();
 
         String greeting = "Welcome to Battleship!\n";
         String instructions = """
             Instructions:
             -------------------------------------------------------------------
-            To Place your ships on the grid when prompted enter your coordinates
-            in the following format: A1 A5
+            To place your ships on the grid, when prompted enter coordinates in
+            the following format: A1 A5
+            Rules:
+            -------------------------------------------------------------------
             The first coordinate is the head of your ship, the second the tail.
             The distance of from head to tail must equal the size of the ship.
             Horizontal and vertical placement only - no diagonals.
             """;
 
         System.out.printf("%s\n%s", greeting, instructions);
-        System.out.println(board);
+        System.out.println(drawBoard(GRID_SIZE, gameGrid));
 
         try (Scanner scanner = new Scanner(System.in)) {
             for (Ship ship : ships) {
                 placeShip(scanner, ship);
+                updateGameGrid(gameGrid, ship);
+                System.out.println(drawBoard(GRID_SIZE, gameGrid));
             }
         }
 
-        System.out.println(Arrays.toString(ships));
+//        System.out.println(Arrays.toString(ships));
+    }
+
+    public static void updateGameGrid(char[][] gameGrid, Ship ship) {
+        Point headPos = ship.getHeadPos();
+        Point tailPos = ship.getTailPos();
+
+        if (headPos.getX() == tailPos.getX() && headPos.getY() < tailPos.getY()) {
+
+            for (int i = headPos.getY(); i <= tailPos.getY(); i++) {
+                gameGrid[headPos.getX()][i] = CellType.SHIP.value;
+            }
+
+        } else if (headPos.getX() == tailPos.getX() && headPos.getY() > tailPos.getY()) {
+
+            for (int i = headPos.getY(); i >= tailPos.getY(); i--) {
+                gameGrid[headPos.getX()][i] = CellType.SHIP.value;
+            }
+
+        } else if (headPos.getY() == tailPos.getY() && headPos.getX() < tailPos.getX()) {
+
+            for (int i = headPos.getX(); i <= tailPos.getX(); i++) {
+                gameGrid[i][headPos.getY()] = CellType.SHIP.value;
+            }
+
+        } else {
+
+            for (int i = headPos.getX(); i >= tailPos.getX(); i--) {
+                gameGrid[i][headPos.getY()] = CellType.SHIP.value;
+            }
+        }
     }
 
     public static void placeShip(Scanner scanner, Ship ship) {
@@ -122,7 +155,7 @@ public class Main {
         char[][] gameGrid = new char[gridSize][gridSize];
 
         for (int i = 0; i < gridSize; i++) {
-            Arrays.fill(gameGrid[i], '~');
+            Arrays.fill(gameGrid[i], CellType.OCEAN.value);
         }
         return gameGrid;
     }
