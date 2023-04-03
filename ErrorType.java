@@ -5,7 +5,8 @@ public enum ErrorType {
         "Ship must align horizontally or vertically\n"),
     WRONG_LENGTH("Error! Wrong length! " +
         "The distance from head to tail must equal size of ship.\n"),
-    TOO_CLOSE("Error! You placed it too close to another one. Please try again.\n");
+    TOO_CLOSE("Error! You placed it too close to another one. Please try again.\n"),
+    OVERLAPPING("Error! You placed it overlapping another ship. Please try again.\n");
 
     final String message;
     ErrorType(String message) {
