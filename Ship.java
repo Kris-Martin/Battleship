@@ -1,5 +1,3 @@
-package battleship;
-
 public class Ship {
     Point headPos;
     Point tailPos;

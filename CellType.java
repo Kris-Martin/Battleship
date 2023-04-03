@@ -1,5 +1,3 @@
-package battleship;
-
 public enum CellType {
     OCEAN('~'),
     SHIP_CELL('O'),
