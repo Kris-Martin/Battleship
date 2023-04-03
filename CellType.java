@@ -1,11 +1,11 @@
 public enum CellType {
     OCEAN('~'),
-    SHIP_CELL('O'),
+    SHIP('O'),
     HIT('X'),
     MISS('M');
-    public final char status;
+    public final char value;
 
-    CellType(char status){
-        this.status = status;
+    CellType(char value){
+        this.value = value;
     }
 }
