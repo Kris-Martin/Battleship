@@ -1,10 +1,15 @@
 public class Point {
-    int x;
-    int y;
+    private int x;
+    private int y;
 
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Point(Point point) {
+        this.x = point.x;
+        this.y = point.y;
     }
 
     public void setPoint(int x, int y) {
@@ -25,7 +30,7 @@ public class Point {
         return this.y;
     }
 
-    public static int lengthBetweenPoints(Point a, Point b) {
+    public static int getDistance(Point a, Point b) {
         return Math.abs(a.x - b.x + a.y - b.y) + 1;
     }
 

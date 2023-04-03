@@ -1,8 +1,8 @@
 public class Ship {
-    Point headPos;
-    Point tailPos;
-    String name;
-    int size;
+    private Point headPos;
+    private Point tailPos;
+    private final String name;
+    private final int size;
 
     public Ship(String name, int size) {
         this.headPos = new Point(0, 0);
@@ -31,15 +31,14 @@ public class Ship {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getSize() {
         return size;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    @Override
+    public String toString() {
+        return String.format(
+                "Name: %s, Size: %d, HeadPos: %s, TailPos: %s", name, size, headPos, tailPos
+        );
     }
 }
