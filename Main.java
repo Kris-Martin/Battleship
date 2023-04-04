@@ -61,20 +61,18 @@ public class Main {
         }
     }
 
-//    public static Compass setFacing(Ship ship) {
-//        Point headPos = ship.getHeadPos();
-//        Point tailPos = ship.getTailPos();
-//
-//        if (headPos.getX() == tailPos.getX() && headPos.getY() < tailPos.getY()) {
-//            return Compass.WEST;
-//        } else if (headPos.getX() == tailPos.getX() && headPos.getY() > tailPos.getY()) {
-//            return Compass.EAST;
-//        } else if (headPos.getY() == tailPos.getY() && headPos.getX() < tailPos.getX()) {
-//            return Compass.NORTH;
-//        } else {
-//            return Compass.SOUTH;
-//        }
-//    }
+    public static Compass getFacing(Point headPos, Point tailPos) {
+
+        if (headPos.getX() == tailPos.getX() && headPos.getY() < tailPos.getY()) {
+            return Compass.WEST;
+        } else if (headPos.getX() == tailPos.getX() && headPos.getY() > tailPos.getY()) {
+            return Compass.EAST;
+        } else if (headPos.getY() == tailPos.getY() && headPos.getX() < tailPos.getX()) {
+            return Compass.NORTH;
+        } else {
+            return Compass.SOUTH;
+        }
+    }
 
     public static void placeShip(Scanner scanner, Ship ship, char[][] gameGrid) {
         boolean isInputCorrect;
@@ -117,14 +115,40 @@ public class Main {
                 isInputCorrect = true;
                 ship.setHeadPos(headPos);
                 ship.setTailPos(tailPos);
-                ship.setFacing();
+                ship.setFacing(getFacing(headPos, tailPos));
             }
 
         } while (!isInputCorrect);
     }
 
     public static boolean isOverlapping(Point headPos, Point tailPos, char[][] gameGrid) {
-        /* TODO: Implement isOverlapping */
+        Compass facing = getFacing(headPos, tailPos);
+
+        if (facing == Compass.WEST) {
+            for (int i = headPos.getY(); i <= tailPos.getY(); i++) {
+                if (gameGrid[headPos.getX()][i] == CellType.SHIP.value) {
+                    return true;
+                }
+            }
+        } else if (facing == Compass.EAST) {
+            for (int i = headPos.getY(); i >= tailPos.getY(); i--) {
+                if (gameGrid[headPos.getX()][i] == CellType.SHIP.value) {
+                    return true;
+                }
+            }
+        } else if (facing == Compass.NORTH) {
+            for (int i = headPos.getX(); i <= tailPos.getX(); i++) {
+                if (gameGrid[i][headPos.getY()] == CellType.SHIP.value) {
+                    return true;
+                }
+            }
+        } else {
+            for (int i = headPos.getX(); i >= tailPos.getX(); i--) {
+                if (gameGrid[i][headPos.getY()] == CellType.SHIP.value) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 

@@ -35,17 +35,10 @@ public class Ship {
     public int getSize() {
         return size;
     }
+    
 
-    public void setFacing() {
-        if (headPos.getX() == tailPos.getX() && headPos.getY() < tailPos.getY()) {
-            facing = Compass.WEST;
-        } else if (headPos.getX() == tailPos.getX() && headPos.getY() > tailPos.getY()) {
-            facing = Compass.EAST;
-        } else if (headPos.getY() == tailPos.getY() && headPos.getX() < tailPos.getX()) {
-            facing = Compass.NORTH;
-        } else {
-            facing = Compass.SOUTH;
-        }
+    public void setFacing(Compass facing) {
+        this.facing = facing;
     }
 
     public Compass getFacing() {
