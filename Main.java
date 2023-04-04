@@ -153,7 +153,58 @@ public class Main {
     }
 
     public static boolean isTooClose(Point headPos, Point tailPos, char[][] gameGrid) {
-        /* TODO: Implement isTooClose */
+        Compass facing = getFacing(headPos, tailPos);
+
+        if (facing == Compass.WEST) {
+            if (isCellLeftOrRightFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
+            if (isCellLeftOrRightFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
+
+            for (int y = headPos.getY(); y <= tailPos.getY(); y++) {
+                if (isCellAboveOrBelowFull(headPos.getX(), y, gameGrid)) return true;
+            }
+
+        } else if (facing == Compass.EAST) {
+            if (isCellLeftOrRightFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
+            if (isCellLeftOrRightFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
+
+            for (int y = headPos.getY(); y >= tailPos.getY(); y--) {
+                if (isCellAboveOrBelowFull(headPos.getX(), y, gameGrid)) return true;
+            }
+
+        } else if (facing == Compass.NORTH) {
+            if (isCellAboveOrBelowFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
+            if (isCellAboveOrBelowFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
+
+            for (int x = headPos.getX(); x <= tailPos.getX(); x++) {
+                if (isCellLeftOrRightFull(x, headPos.getY(), gameGrid)) return true;
+            }
+
+        } else {
+            if (isCellAboveOrBelowFull(headPos.getX(), headPos.getX(), gameGrid)) return true;
+            if (isCellAboveOrBelowFull(tailPos.getX(), tailPos.getX(), gameGrid)) return true;
+
+            for (int x = headPos.getX(); x >= tailPos.getX(); x--) {
+                if (isCellLeftOrRightFull(x, headPos.getY(), gameGrid)) return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isCellAboveOrBelowFull(int x, int y, char[][] gameGrid) {
+        if (x != 0 && gameGrid[x-1][y] == CellType.SHIP.value) {
+            return true;
+        } else if (x != 9 && gameGrid[x+1][y] == CellType.SHIP.value) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isCellLeftOrRightFull(int x, int y, char[][] gameGrid) {
+        if (y != 0 && gameGrid[x][y-1] == CellType.SHIP.value) {
+            return true;
+        } else if (y != 9 && gameGrid[x][y+1] == CellType.SHIP.value) {
+            return true;
+        }
         return false;
     }
 

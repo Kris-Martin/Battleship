@@ -35,7 +35,6 @@ public class Ship {
     public int getSize() {
         return size;
     }
-    
 
     public void setFacing(Compass facing) {
         this.facing = facing;
