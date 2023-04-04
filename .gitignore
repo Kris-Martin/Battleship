@@ -1,4 +1,3 @@
-/battleship/.metals/metals.log
-/battleship/.metals/metals.mv.db
-/battleship/.vscode/settings.json
+.metals
 .DS_Store
+.vscode
