@@ -40,16 +40,17 @@ public class Main {
     public static void updateGameGrid(char[][] gameGrid, Ship ship) {
         Point headPos = ship.getHeadPos();
         Point tailPos = ship.getTailPos();
+        Compass facing = ship.getFacing();
 
-        if (getFacing(ship) == Compass.WEST) {
+        if (facing == Compass.WEST) {
             for (int i = headPos.getY(); i <= tailPos.getY(); i++) {
                 gameGrid[headPos.getX()][i] = CellType.SHIP.value;
             }
-        } else if (getFacing(ship) == Compass.EAST) {
+        } else if (facing == Compass.EAST) {
             for (int i = headPos.getY(); i >= tailPos.getY(); i--) {
                 gameGrid[headPos.getX()][i] = CellType.SHIP.value;
             }
-        } else if (getFacing(ship) == Compass.NORTH) {
+        } else if (facing == Compass.NORTH) {
             for (int i = headPos.getX(); i <= tailPos.getX(); i++) {
                 gameGrid[i][headPos.getY()] = CellType.SHIP.value;
             }
@@ -60,20 +61,20 @@ public class Main {
         }
     }
 
-    public static Compass getFacing(Ship ship) {
-        Point headPos = ship.getHeadPos();
-        Point tailPos = ship.getTailPos();
-
-        if (headPos.getX() == tailPos.getX() && headPos.getY() < tailPos.getY()) {
-            return Compass.WEST;
-        } else if (headPos.getX() == tailPos.getX() && headPos.getY() > tailPos.getY()) {
-            return Compass.EAST;
-        } else if (headPos.getY() == tailPos.getY() && headPos.getX() < tailPos.getX()) {
-            return Compass.NORTH;
-        } else {
-            return Compass.SOUTH;
-        }
-    }
+//    public static Compass setFacing(Ship ship) {
+//        Point headPos = ship.getHeadPos();
+//        Point tailPos = ship.getTailPos();
+//
+//        if (headPos.getX() == tailPos.getX() && headPos.getY() < tailPos.getY()) {
+//            return Compass.WEST;
+//        } else if (headPos.getX() == tailPos.getX() && headPos.getY() > tailPos.getY()) {
+//            return Compass.EAST;
+//        } else if (headPos.getY() == tailPos.getY() && headPos.getX() < tailPos.getX()) {
+//            return Compass.NORTH;
+//        } else {
+//            return Compass.SOUTH;
+//        }
+//    }
 
     public static void placeShip(Scanner scanner, Ship ship, char[][] gameGrid) {
         boolean isInputCorrect;
@@ -107,17 +108,28 @@ public class Main {
             } else if (isOverlapping(headPos, tailPos, gameGrid)) {
                 System.out.println(ErrorType.OVERLAPPING.message);
                 isInputCorrect = false;
+
+            } else if (isTooClose(headPos, tailPos, gameGrid)) {
+                System.out.println(ErrorType.TOO_CLOSE.message);
+                isInputCorrect = false;
+
             } else {
                 isInputCorrect = true;
                 ship.setHeadPos(headPos);
                 ship.setTailPos(tailPos);
+                ship.setFacing();
             }
 
         } while (!isInputCorrect);
     }
 
-    private static boolean isOverlapping(Point headPos, Point tailPos, char[][] gameGrid) {
-        /* TODO: Implement this method */
+    public static boolean isOverlapping(Point headPos, Point tailPos, char[][] gameGrid) {
+        /* TODO: Implement isOverlapping */
+        return false;
+    }
+
+    public static boolean isTooClose(Point headPos, Point tailPos, char[][] gameGrid) {
+        /* TODO: Implement isTooClose */
         return false;
     }
 
