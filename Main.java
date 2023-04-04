@@ -42,21 +42,26 @@ public class Main {
         Point tailPos = ship.getTailPos();
         Compass facing = ship.getFacing();
 
-        if (facing == Compass.WEST) {
-            for (int i = headPos.getY(); i <= tailPos.getY(); i++) {
-                gameGrid[headPos.getX()][i] = CellType.SHIP.value;
+        switch (facing) {
+            case WEST -> {
+                for (int i = headPos.getY(); i <= tailPos.getY(); i++) {
+                    gameGrid[headPos.getX()][i] = CellType.SHIP.value;
+                }
             }
-        } else if (facing == Compass.EAST) {
-            for (int i = headPos.getY(); i >= tailPos.getY(); i--) {
-                gameGrid[headPos.getX()][i] = CellType.SHIP.value;
+            case EAST -> {
+                for (int i = headPos.getY(); i >= tailPos.getY(); i--) {
+                    gameGrid[headPos.getX()][i] = CellType.SHIP.value;
+                }
             }
-        } else if (facing == Compass.NORTH) {
-            for (int i = headPos.getX(); i <= tailPos.getX(); i++) {
-                gameGrid[i][headPos.getY()] = CellType.SHIP.value;
+            case NORTH -> {
+                for (int i = headPos.getX(); i <= tailPos.getX(); i++) {
+                    gameGrid[i][headPos.getY()] = CellType.SHIP.value;
+                }
             }
-        } else {
-            for (int i = headPos.getX(); i >= tailPos.getX(); i--) {
-                gameGrid[i][headPos.getY()] = CellType.SHIP.value;
+            case SOUTH -> {
+                for (int i = headPos.getX(); i >= tailPos.getX(); i--) {
+                    gameGrid[i][headPos.getY()] = CellType.SHIP.value;
+                }
             }
         }
     }
@@ -83,11 +88,9 @@ public class Main {
             Point headPos = new Point(coordinates.get("headPos"));
             Point tailPos = new Point(coordinates.get("tailPos"));
 
-            if (isOutOfBounds(headPos.getX(), headPos.getY())) {
-                System.out.println(ErrorType.OUT_OF_BOUNDS.message);
-                isInputCorrect = false;
-
-            } else if (isOutOfBounds(tailPos.getX(), tailPos.getY())) {
+            if (isOutOfBounds(headPos.getX(), headPos.getY()) ||
+                isOutOfBounds(tailPos.getX(), tailPos.getY())
+            ) {
                 System.out.println(ErrorType.OUT_OF_BOUNDS.message);
                 isInputCorrect = false;
 
@@ -124,28 +127,33 @@ public class Main {
     public static boolean isOverlapping(Point headPos, Point tailPos, char[][] gameGrid) {
         Compass facing = getFacing(headPos, tailPos);
 
-        if (facing == Compass.WEST) {
-            for (int i = headPos.getY(); i <= tailPos.getY(); i++) {
-                if (gameGrid[headPos.getX()][i] == CellType.SHIP.value) {
-                    return true;
+        switch (facing) {
+            case WEST -> {
+                for (int i = headPos.getY(); i <= tailPos.getY(); i++) {
+                    if (gameGrid[headPos.getX()][i] == CellType.SHIP.value) {
+                        return true;
+                    }
                 }
             }
-        } else if (facing == Compass.EAST) {
-            for (int i = headPos.getY(); i >= tailPos.getY(); i--) {
-                if (gameGrid[headPos.getX()][i] == CellType.SHIP.value) {
-                    return true;
+            case EAST -> {
+                for (int i = headPos.getY(); i >= tailPos.getY(); i--) {
+                    if (gameGrid[headPos.getX()][i] == CellType.SHIP.value) {
+                        return true;
+                    }
                 }
             }
-        } else if (facing == Compass.NORTH) {
-            for (int i = headPos.getX(); i <= tailPos.getX(); i++) {
-                if (gameGrid[i][headPos.getY()] == CellType.SHIP.value) {
-                    return true;
+            case NORTH -> {
+                for (int i = headPos.getX(); i <= tailPos.getX(); i++) {
+                    if (gameGrid[i][headPos.getY()] == CellType.SHIP.value) {
+                        return true;
+                    }
                 }
             }
-        } else {
-            for (int i = headPos.getX(); i >= tailPos.getX(); i--) {
-                if (gameGrid[i][headPos.getY()] == CellType.SHIP.value) {
-                    return true;
+            case SOUTH -> {
+                for (int i = headPos.getX(); i >= tailPos.getX(); i--) {
+                    if (gameGrid[i][headPos.getY()] == CellType.SHIP.value) {
+                        return true;
+                    }
                 }
             }
         }
@@ -155,57 +163,47 @@ public class Main {
     public static boolean isTooClose(Point headPos, Point tailPos, char[][] gameGrid) {
         Compass facing = getFacing(headPos, tailPos);
 
-        if (facing == Compass.WEST) {
-            if (isCellLeftOrRightFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
-            if (isCellLeftOrRightFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
-
-            for (int y = headPos.getY(); y <= tailPos.getY(); y++) {
-                if (isCellAboveOrBelowFull(headPos.getX(), y, gameGrid)) return true;
+        switch (facing) {
+            case WEST -> {
+                if (isCellLeftOrRightFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
+                if (isCellLeftOrRightFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
+                for (int y = headPos.getY(); y <= tailPos.getY(); y++) {
+                    if (isCellAboveOrBelowFull(headPos.getX(), y, gameGrid)) return true;
+                }
             }
-
-        } else if (facing == Compass.EAST) {
-            if (isCellLeftOrRightFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
-            if (isCellLeftOrRightFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
-
-            for (int y = headPos.getY(); y >= tailPos.getY(); y--) {
-                if (isCellAboveOrBelowFull(headPos.getX(), y, gameGrid)) return true;
+            case EAST -> {
+                if (isCellLeftOrRightFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
+                if (isCellLeftOrRightFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
+                for (int y = headPos.getY(); y >= tailPos.getY(); y--) {
+                    if (isCellAboveOrBelowFull(headPos.getX(), y, gameGrid)) return true;
+                }
             }
-
-        } else if (facing == Compass.NORTH) {
-            if (isCellAboveOrBelowFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
-            if (isCellAboveOrBelowFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
-
-            for (int x = headPos.getX(); x <= tailPos.getX(); x++) {
-                if (isCellLeftOrRightFull(x, headPos.getY(), gameGrid)) return true;
+            case NORTH -> {
+                if (isCellAboveOrBelowFull(headPos.getX(), headPos.getY(), gameGrid)) return true;
+                if (isCellAboveOrBelowFull(tailPos.getX(), tailPos.getY(), gameGrid)) return true;
+                for (int x = headPos.getX(); x <= tailPos.getX(); x++) {
+                    if (isCellLeftOrRightFull(x, headPos.getY(), gameGrid)) return true;
+                }
             }
-
-        } else {
-            if (isCellAboveOrBelowFull(headPos.getX(), headPos.getX(), gameGrid)) return true;
-            if (isCellAboveOrBelowFull(tailPos.getX(), tailPos.getX(), gameGrid)) return true;
-
-            for (int x = headPos.getX(); x >= tailPos.getX(); x--) {
-                if (isCellLeftOrRightFull(x, headPos.getY(), gameGrid)) return true;
+            case SOUTH -> {
+                if (isCellAboveOrBelowFull(headPos.getX(), headPos.getX(), gameGrid)) return true;
+                if (isCellAboveOrBelowFull(tailPos.getX(), tailPos.getX(), gameGrid)) return true;
+                for (int x = headPos.getX(); x >= tailPos.getX(); x--) {
+                    if (isCellLeftOrRightFull(x, headPos.getY(), gameGrid)) return true;
+                }
             }
         }
         return false;
     }
 
     public static boolean isCellAboveOrBelowFull(int x, int y, char[][] gameGrid) {
-        if (x != 0 && gameGrid[x-1][y] == CellType.SHIP.value) {
-            return true;
-        } else if (x != 9 && gameGrid[x+1][y] == CellType.SHIP.value) {
-            return true;
-        }
-        return false;
+        return x != 0 && gameGrid[x - 1][y] == CellType.SHIP.value ||
+               x != 9 && gameGrid[x + 1][y] == CellType.SHIP.value;
     }
 
     public static boolean isCellLeftOrRightFull(int x, int y, char[][] gameGrid) {
-        if (y != 0 && gameGrid[x][y-1] == CellType.SHIP.value) {
-            return true;
-        } else if (y != 9 && gameGrid[x][y+1] == CellType.SHIP.value) {
-            return true;
-        }
-        return false;
+        return y != 0 && gameGrid[x][y - 1] == CellType.SHIP.value ||
+               y != 9 && gameGrid[x][y + 1] == CellType.SHIP.value;
     }
 
     public static String[] getCoordinates(Scanner scanner, Ship ship) {
@@ -240,7 +238,7 @@ public class Main {
     }
 
     public static Map<String, Point> parseCoordinates(String[] input) {
-        char startingLetter = 'A';
+        final char startingLetter = 'A';
 
         int x1 = (int) input[0].toUpperCase().charAt(0) - startingLetter;
         int y1 = Integer.parseInt(input[0].substring(1)) - 1;
@@ -267,17 +265,14 @@ public class Main {
         StringBuilder board = new StringBuilder();
         board.append("\n  ");
         for (int i = 1; i <= gridSize; i++) {
-            board.append(i);
-            board.append(" ");
+            board.append(i).append(" ");
         }
         board.append("\n");
         char letter = 'A';
         for (int i = 0; i < gridSize; i++) {
-            board.append(letter++);
-            board.append(" ");
+            board.append(letter++).append(" ");
             for (int j = 0; j < gridSize; j++) {
-                board.append(gameGrid[i][j]);
-                board.append(" ");
+                board.append(gameGrid[i][j]).append(" ");
             }
             board.append("\n");
         }
