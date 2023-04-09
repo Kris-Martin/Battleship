@@ -23,18 +23,59 @@ public class Main {
             Horizontal and vertical placement only - no diagonals.
             """;
 
+        // Print greeting and game instructions
         System.out.printf("%s\n%s", greeting, instructions);
         System.out.println(drawBoard(GRID_SIZE, gameGrid));
 
+        // Place ships according to user input
         try (Scanner scanner = new Scanner(System.in)) {
             for (Ship ship : ships) {
                 placeShip(scanner, ship, gameGrid);
                 updateGameGrid(gameGrid, ship);
                 System.out.println(drawBoard(GRID_SIZE, gameGrid));
             }
+
+            // Start game
+            System.out.println("The game starts!");
+            System.out.println(drawBoard(GRID_SIZE, gameGrid));
+
+            // Get user input for shot coordinate
+            Point shot = getShot(scanner);
+
+            // Check if shot hit a ship
+            if (gameGrid[shot.getX()][shot.getY()] == CellType.SHIP.value) {
+                gameGrid[shot.getX()][shot.getY()] = CellType.HIT.value;
+                System.out.println(drawBoard(GRID_SIZE, gameGrid));
+                System.out.println("You hit a ship!");
+            } else {
+                gameGrid[shot.getX()][shot.getY()] = CellType.MISS.value;
+                System.out.println(drawBoard(GRID_SIZE, gameGrid));
+                System.out.println("You missed!");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static Point getShot(Scanner scanner) {
+        System.out.println("Take a shot!");
+        String input = scanner.nextLine().trim();
+        while (
+            input.length() < 2 ||
+            input.length() > 3 ||
+            input.matches("^.*[^a-jA-J0-9].*$") ||
+            Integer.parseInt(input.substring(1)) > 10
+        ) {
+            System.out.println("Error! Please enter a valid coordinate. Try again:");
+            input = scanner.nextLine().trim();
         }
 
-//        System.out.println(Arrays.toString(ships));
+        // Convert user input to Point
+        final char startingLetter = 'A';
+        int x = Character.toUpperCase(input.charAt(0)) - startingLetter;
+        int y = Integer.parseInt(input.substring(1)) - 1;
+        return new Point(x, y);
     }
 
     public static void updateGameGrid(char[][] gameGrid, Ship ship) {
