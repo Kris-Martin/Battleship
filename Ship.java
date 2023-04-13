@@ -1,8 +1,8 @@
 public class Ship {
-    private Point headPos;
-    private Point tailPos;
     private final String name;
     private final int size;
+    private final Point headPos;
+    private final Point tailPos;
     private Compass facing;
 
     public Ship(String name, int size) {
@@ -12,20 +12,22 @@ public class Ship {
         this.size = size;
     }
 
-    public Point getHeadPos() {
-        return headPos;
+    public void setPosition(Point headPos, Point tailPos) {
+        this.setHeadPos(headPos);
+        this.setTailPos(tailPos);
+        this.setFacing(Compass.getFacing(headPos, tailPos));
     }
 
-    public void setHeadPos(Point headPos) {
+    private void setHeadPos(Point headPos) {
         this.headPos.setPoint(headPos);
     }
 
-    public Point getTailPos() {
-        return tailPos;
+    private void setTailPos(Point tailPos) {
+        this.tailPos.setPoint(tailPos);
     }
 
-    public void setTailPos(Point tailPos) {
-        this.tailPos.setPoint(tailPos);
+    private void setFacing(Compass facing) {
+        this.facing = facing;
     }
 
     public String getName() {
@@ -36,8 +38,12 @@ public class Ship {
         return size;
     }
 
-    public void setFacing(Compass facing) {
-        this.facing = facing;
+    public Point getHeadPos() {
+        return headPos;
+    }
+
+    public Point getTailPos() {
+        return tailPos;
     }
 
     public Compass getFacing() {
