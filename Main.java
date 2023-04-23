@@ -5,6 +5,7 @@ public class Main {
     public static void main(String[] args) {
 
         char[][] field = Grid.newGrid();
+        char[][] fogOfWar = Grid.newGrid();
         Ship[] ships = createShips();
 
         final String greeting = "Welcome to Battleship!\n";
@@ -34,20 +35,28 @@ public class Main {
 
             // Start game
             System.out.println("The game starts!");
-            drawBoard(field);
+            drawBoard(fogOfWar);
 
             // Get user input for shot coordinate
             Point shot = getShot(scanner);
 
             // Check if shot hit a ship
             if (field[shot.getX()][shot.getY()] == Cell.SHIP.value) {
+                // Update field
                 field[shot.getX()][shot.getY()] = Cell.HIT.value;
-                drawBoard(field);
+                // Update fog of war view
+                fogOfWar[shot.getX()][shot.getY()] = Cell.HIT.value;
+                drawBoard(fogOfWar);
                 System.out.println("You hit a ship!");
-            } else {
-                field[shot.getX()][shot.getY()] = Cell.MISS.value;
                 drawBoard(field);
+            } else {
+                // Update field
+                field[shot.getX()][shot.getY()] = Cell.MISS.value;
+                // Update fog of war view
+                fogOfWar[shot.getX()][shot.getY()] = Cell.MISS.value;
+                drawBoard(fogOfWar);
                 System.out.println("You missed!");
+                drawBoard(field);
             }
 
         } catch (Exception e) {
