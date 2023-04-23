@@ -1,15 +1,20 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Ship {
     private final String name;
     private final int size;
     private final Point headPos;
     private final Point tailPos;
     private Compass facing;
+    private final Map<String, Boolean> cells;
 
     public Ship(String name, int size) {
         this.headPos = new Point(0, 0);
         this.tailPos = new Point(0, 0);
         this.name = name;
         this.size = size;
+        this.cells = new HashMap<>();
     }
 
     public void setPosition(Point headPos, Point tailPos) {
@@ -28,6 +33,18 @@ public class Ship {
 
     private void setFacing(Compass facing) {
         this.facing = facing;
+    }
+
+    public void addCell(String pos, Boolean isShot) {
+        this.cells.put(pos, isShot);
+    }
+
+    public Boolean isSunk() {
+        return this.cells.values().stream().allMatch(isShot -> isShot);
+    }
+
+    public Map<String, Boolean> getCells() {
+        return this.cells;
     }
 
     public String getName() {
