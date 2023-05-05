@@ -7,6 +7,7 @@ public enum ShipType {
 
     public final int size;
     public final String name;
+
     ShipType(int size, String name) {
         this.size = size;
         this.name = name;
