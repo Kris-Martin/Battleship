@@ -25,84 +25,32 @@ public class Main {
         System.out.printf("%s\n%s", greeting, instructions);
 
         try (Scanner scanner = new Scanner(System.in)) {
-            // Player setup
-            player1.setupPlayerGrid(scanner);
-
-            // Start game
+            Game.setup(scanner, player1, player2);
             System.out.println("The game starts!");
-            Board.draw(player1.fogOfWar);
+            Player currentPlayer = player1;
+            Player otherPlayer = player2;
 
-            // Get user input for shot coordinate
-            System.out.println("Take a shot!");
-            Point shot;
+            do {
+                Game.process(scanner, currentPlayer, otherPlayer);
 
-            while (player1.shipsSunk != player1.ships.length) {
-                shot = getShot(scanner);
-
-                // Check if shot has already been taken
-                if (player1.shotsTaken.contains(shot.toString())) {
-                    Board.draw(player1.fogOfWar);
-                    System.out.print("You have already taken that shot. Try again: ");
-
-                // Check if shot hit a ship
-                } else if (player1.field[shot.getX()][shot.getY()] == Cell.SHIP.value) {
-                    player1.field[shot.getX()][shot.getY()] = Cell.HIT.value;
-                    player1.fogOfWar[shot.getX()][shot.getY()] = Cell.HIT.value;
-                    Board.draw(player1.fogOfWar);
-
-                    // Iterate through ships to find the one that was hit
-                    for (Ship ship : player1.ships) {
-                        if (ship.getCells().containsKey(shot.toString())) {
-                            // Set cell hit to true
-                            ship.getCells().replace(shot.toString(), true);
-                            // Check if ship is sunk
-                            if (ship.isSunk() && player1.shipsSunk < player1.ships.length) {
-                                // Update ships sunk
-                                player1.shipsSunk++;
-                                // Only print if not last ship
-                                if (player1.shipsSunk < player1.ships.length) {
-                                    System.out.print("You sank a ship! Specify a new target: ");
-                                }
-                            // If not sunk, print hit message
-                            } else if (player1.shipsSunk < player1.ships.length) {
-                                System.out.print("You hit a ship! Try again: ");
-                            }
-                            break;
-                        }
+                if (!Game.isGameOver(player1, player2)) {
+                    if (currentPlayer.equals(player1)) {
+                        currentPlayer = player2;
+                        otherPlayer = player1;
+                    } else {
+                        currentPlayer = player1;
+                        otherPlayer = player2;
                     }
-                // If shot missed
-                } else {
-                    // Update field
-                    player1.field[shot.getX()][shot.getY()] = Cell.MISS.value;
-                    // Update fog of war view
-                    player1.fogOfWar[shot.getX()][shot.getY()] = Cell.MISS.value;
-                    Board.draw(player1.fogOfWar);
-                    System.out.print("You missed! Try again: ");
                 }
-                // Add shot to shots taken
-                player1.shotsTaken.add(shot.toString());
-            }
+
+            } while (!Game.isGameOver(player1, player2));
+
             // If all ships are sunk, print win message
-            System.out.println("You sank the last ship. You won. Congratulations!");
+            System.out.printf("You sank the last ship. You won. Congratulations Player %d!%n",
+                              currentPlayer.playerNumber);
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-    }
-
-    private static Point getShot(Scanner scanner) {
-        String input = scanner.nextLine().trim();
-        while (!input.matches("^[a-jA-J0-9]{2,3}$") ||
-               Integer.parseInt(input.substring(1)) > 10
-        ) {
-            System.out.println("Error! Please enter a valid coordinate. Try again:");
-            input = scanner.nextLine().trim();
-        }
-
-        // Convert user input to Point
-        final char startingLetter = 'A';
-        int x = Character.toUpperCase(input.charAt(0)) - startingLetter;
-        int y = Integer.parseInt(input.substring(1)) - 1;
-        return new Point(x, y);
     }
 }
