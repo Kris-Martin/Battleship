@@ -12,11 +12,6 @@ public class Point {
         this.y = point.y;
     }
 
-    public void setPoint(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
     public void setPoint(Point point) {
         this.x = point.x;
         this.y = point.y;
